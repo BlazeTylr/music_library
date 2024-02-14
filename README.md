@@ -4,8 +4,8 @@ This is a starter project for you to use to start your Python database projects.
 
 There are two videos to support:
 
-* [A demonstration of setting up the project](https://youtu.be/8dBADUN8gdg?t=0s)
-* [A walkthrough of the project codebase](https://www.youtube.com/watch?v=8dBADUN8gdg&t=287s) 
+- [A demonstration of setting up the project](https://youtu.be/8dBADUN8gdg?t=0s)
+- [A walkthrough of the project codebase](https://www.youtube.com/watch?v=8dBADUN8gdg&t=287s)
 
 ## Setup
 
@@ -39,37 +39,28 @@ There are two videos to support:
 ; python app.py
 ```
 
-<details>
-  <summary>:confused: I see an error about `python_full_version`?</summary>
+```mermaid
+sequenceDiagram
+    participant t as terminal
+    participant app as Main program (in app.py)
+    participant ar as AlbumRepository class <br /> (in lib/album_repository.py)
+    participant db_conn as DatabaseConnection class in (in lib/database_connection.py)
+    participant db as Postgres database
 
-  <!-- OMITTED -->
+    Note left of t: Flow of time <br />⬇ <br /> ⬇ <br /> ⬇
 
-  ---
+    t->>app: Runs `python app.py`
+    app->>db_conn: Opens connection to database by calling 'connect' method on DatabaseConnection
+    db_conn->>db_conn: Opens database connection using PGSQL and stores the connection
+    app->>ar: Calls 'all' method on AlbumRepository
+    ar->>db_conn: Sends SQL query by calling 'execute' method on DatabaseConnection
+    db_conn->>db: Sends query to database via the open database connection
+    db->>db_conn: Returns a list of dictionaries, one for each row of the albums table
 
-  Your `pipenv` may be outdated and subject to a bug with newer `Pipfile`s.
-
-  ```shell
-  ; pipenv --version
-  2022.9.24 # If you see something in September 2022, try this
-  ; pip3 install "pipenv>=2022.11.5" -U
-  # pip3 will update pipenv for you
-
-  # Then try running `pipenv install` again
-  ; pipenv install
-  ```
-
-  If that works, great! If not, contact your coach.
-
-  ---
-</details>
-
-
-<!-- BEGIN GENERATED SECTION DO NOT EDIT -->
-
----
-
-**How was this resource?**  
-[😫](https://airtable.com/shrUJ3t7KLMqVRFKR?prefill_Repository=makersacademy%2Fdatabases-in-python-project-starter&prefill_File=README.md&prefill_Sentiment=😫) [😕](https://airtable.com/shrUJ3t7KLMqVRFKR?prefill_Repository=makersacademy%2Fdatabases-in-python-project-starter&prefill_File=README.md&prefill_Sentiment=😕) [😐](https://airtable.com/shrUJ3t7KLMqVRFKR?prefill_Repository=makersacademy%2Fdatabases-in-python-project-starter&prefill_File=README.md&prefill_Sentiment=😐) [🙂](https://airtable.com/shrUJ3t7KLMqVRFKR?prefill_Repository=makersacademy%2Fdatabases-in-python-project-starter&prefill_File=README.md&prefill_Sentiment=🙂) [😀](https://airtable.com/shrUJ3t7KLMqVRFKR?prefill_Repository=makersacademy%2Fdatabases-in-python-project-starter&prefill_File=README.md&prefill_Sentiment=😀)  
-Click an emoji to tell us.
-
-<!-- END GENERATED SECTION DO NOT EDIT -->
+    db_conn->>ar: Returns a list of dictionaries, one for each row of the albums table
+    loop
+        ar->>ar: Loops through a list and creates an Album object object for every row
+    end
+    ar->>app: Returns a list of Album objects
+    app->>t: Prints list of albums to terminal
+```
